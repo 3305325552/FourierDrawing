@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8w7wrl1w3ppk"]
+
+[ext_resource type="Script" uid="uid://c74ka6y4r4y3y" path="res://Script/DrawingCanvas.cs" id="1_ifcv7"]
+[ext_resource type="Script" uid="uid://cbq4wqgoe3eum" path="res://Script/Camera2d.cs" id="2_m6o7e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m6o7e"]
+size = Vector2(356, 560)
+
+[node name="DrawingCanvas" type="Node2D"]
+script = ExtResource("1_ifcv7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Canvas" type="Node2D" parent="."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="UI"]
+position = Vector2(23, 35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D"]
+position = Vector2(178, 280)
+shape = SubResource("RectangleShape2D_m6o7e")
+
+[node name="SettingsRect" type="ColorRect" parent="UI/Area2D"]
+offset_right = 356.0
+offset_bottom = 560.0
+color = Color(0.374139, 0.374139, 0.374139, 1)
+
+[node name="VSplitContainer" type="VSplitContainer" parent="UI"]
+offset_left = 33.0
+offset_top = 45.0
+offset_right = 368.0
+offset_bottom = 585.0
+collapsed = true
+dragging_enabled = false
+
+[node name="TabBar" type="HBoxContainer" parent="UI/VSplitContainer"]
+layout_mode = 2
+
+[node name="AddButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Add"
+
+[node name="DelButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Del"
+
+[node name="ClearButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+focus_mode = 0
+text = "Clear"
+
+[node name="MinimizeButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+text = "  -  "
+
+[node name="NodeList" type="ScrollContainer" parent="UI/VSplitContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VSplitContainer/NodeList"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_m6o7e")
