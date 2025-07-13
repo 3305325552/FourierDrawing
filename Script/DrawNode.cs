@@ -28,8 +28,13 @@ public partial class DrawNode : Node2D
 
     public void Update(float TimePassed)
     {
-        if(PrevPoint != null) Position = PrevPoint.Position + new Vector2(Mathf.Cos(PrevPoint.LineAngle) * PrevPoint.LineLength, Mathf.Sin(PrevPoint.LineAngle) * PrevPoint.LineLength);
-        LineAngle = 2 * Mathf.Pi * TimePassed / Speed + Phi0;
+        if (PrevPoint != null) Position = PrevPoint.Position + new Vector2(Mathf.Cos(PrevPoint.LineAngle) * PrevPoint.LineLength, Mathf.Sin(PrevPoint.LineAngle) * PrevPoint.LineLength);
+        LineAngle = 2 * Mathf.Pi * TimePassed * Speed + Phi0;
         LineItem.Rotation = LineAngle;
+    }
+
+    public void Rotate(int degrees)
+    {
+        Phi0 += degrees * Mathf.Pi / 180;
     }
 }

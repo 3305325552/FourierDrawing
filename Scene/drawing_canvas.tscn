@@ -1,10 +1,24 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8w7wrl1w3ppk"]
+[gd_scene load_steps=9 format=3 uid="uid://c8w7wrl1w3ppk"]
 
 [ext_resource type="Script" uid="uid://c74ka6y4r4y3y" path="res://Script/DrawingCanvas.cs" id="1_ifcv7"]
 [ext_resource type="Script" uid="uid://cbq4wqgoe3eum" path="res://Script/Camera2d.cs" id="2_m6o7e"]
+[ext_resource type="PackedScene" uid="uid://bsraemfgax16k" path="res://Scene/tools_window.tscn" id="2_v0lcu"]
+[ext_resource type="PackedScene" uid="uid://cynid07jg8ncb" path="res://Scene/settings_window.tscn" id="3_4b610"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m6o7e"]
 size = Vector2(356, 560)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6o7e"]
+bg_color = Color(0.427493, 0.427493, 0.427493, 1)
+expand_margin_top = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0lcu"]
+bg_color = Color(0.6, 0.6, 0.6, 0.247059)
+expand_margin_top = 3.0
+
+[sub_resource type="Theme" id="Theme_4b610"]
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_m6o7e")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_v0lcu")
 
 [node name="DrawingCanvas" type="Node2D"]
 script = ExtResource("1_ifcv7")
@@ -26,6 +40,7 @@ color = Color(1, 1, 0, 1)
 [node name="Canvas" type="Node2D" parent="."]
 
 [node name="UI" type="CanvasLayer" parent="."]
+process_mode = 3
 
 [node name="Area2D" type="Area2D" parent="UI"]
 position = Vector2(23, 35)
@@ -37,7 +52,7 @@ shape = SubResource("RectangleShape2D_m6o7e")
 [node name="SettingsRect" type="ColorRect" parent="UI/Area2D"]
 offset_right = 356.0
 offset_bottom = 560.0
-color = Color(0.374139, 0.374139, 0.374139, 1)
+color = Color(0.114897, 0.114897, 0.114897, 1)
 
 [node name="VSplitContainer" type="VSplitContainer" parent="UI"]
 offset_left = 33.0
@@ -50,26 +65,90 @@ dragging_enabled = false
 [node name="TabBar" type="HBoxContainer" parent="UI/VSplitContainer"]
 layout_mode = 2
 
-[node name="AddButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+[node name="HScrollBar" type="ScrollContainer" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_4b610")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VSplitContainer/TabBar/HScrollBar"]
+layout_mode = 2
+
+[node name="AddNodeButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
-text = "Add"
+text = "AddNode"
 
-[node name="DelButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+[node name="DelNodeButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
-text = "Del"
+text = "DelNode"
 
-[node name="ClearButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+[node name="ClearButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
 text = "Clear"
 
+[node name="AddBrushButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "AddBrush"
+
+[node name="DelBrushButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "DelBrush"
+
+[node name="CanvasButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Canvas"
+
+[node name="ToolsButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Tools"
+
+[node name="SaveButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Load"
+
+[node name="SettingsButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Settings"
+
+[node name="Space" type="Control" parent="UI/VSplitContainer/TabBar"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = " < "
+
+[node name="CurrentBrush" type="Label" parent="UI/VSplitContainer/TabBar"]
+custom_minimum_size = Vector2(43, 0)
+layout_mode = 2
+text = "1/1"
+
+[node name="NextButton" type="Button" parent="UI/VSplitContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = " > "
+
 [node name="MinimizeButton" type="Button" parent="UI/VSplitContainer/TabBar"]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 size_flags_vertical = 0
 focus_mode = 0
 toggle_mode = true
@@ -82,6 +161,10 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/VSplitContainer/NodeList"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ToolsWindow" parent="UI" instance=ExtResource("2_v0lcu")]
+
+[node name="SettingsWindow" parent="UI" instance=ExtResource("3_4b610")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_m6o7e")

@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Drawing"
+run/main_scene="uid://c8w7wrl1w3ppk"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

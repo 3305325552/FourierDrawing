@@ -4,22 +4,22 @@ using System;
 public partial class NodeItem : HBoxContainer
 {
     public Label NameLabel;
-    public LineEdit SpeedEdit;
-    public LineEdit LengthEdit;
-    public LineEdit Phi0Edit;
+    public CustomLineEdit SpeedEdit;
+    public CustomLineEdit LengthEdit;
+    public CustomLineEdit Phi0Edit;
 
     public DrawNode DrawNode { get; set; }
 
     public override void _Ready()
     {
-        NameLabel = GetNode<Label>("Label");
-        SpeedEdit = GetNode<LineEdit>("SpeedSetting/LineEdit");
-        LengthEdit = GetNode<LineEdit>("LineLengthSetting/LineEdit");
-        Phi0Edit = GetNode<LineEdit>("Phi0Setting/LineEdit");
+        NameLabel = GetNode<Label>("PanelContainer/Label");
+        SpeedEdit = GetNode<CustomLineEdit>("SpeedEdit");
+        LengthEdit = GetNode<CustomLineEdit>("LengthEdit");
+        Phi0Edit = GetNode<CustomLineEdit>("Phi0Edit");
 
-        SpeedEdit.TextChanged += OnSpeedChanged;
-        LengthEdit.TextChanged += OnLengthChanged;
-        Phi0Edit.TextChanged += OnPhi0Changed;
+        SpeedEdit.LineEdit.TextChanged += OnSpeedChanged;
+        LengthEdit.LineEdit.TextChanged += OnLengthChanged;
+        Phi0Edit.LineEdit.TextChanged += OnPhi0Changed;
     }
 
     public void OnSpeedChanged(string value)

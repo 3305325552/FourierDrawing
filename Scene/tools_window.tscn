@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsraemfgax16k"]
+
+[ext_resource type="Script" uid="uid://b8es44ao6er8w" path="res://Script/ToolsWindow.cs" id="1_10lsk"]
+
+[node name="ToolsWindow" type="Window"]
+title = "Tools"
+initial_position = 1
+size = Vector2i(480, 360)
+min_size = Vector2i(480, 360)
+script = ExtResource("1_10lsk")
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 104.0
+offset_bottom = 76.0
+
+[node name="PauseButton" type="Button" parent="HFlowContainer"]
+layout_mode = 2
+text = "Pause"
+
+[node name="ClearButton" type="Button" parent="HFlowContainer"]
+layout_mode = 2
+text = "Clear"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HFlowContainer/HBoxContainer"]
+layout_mode = 2
+text = "90"
+placeholder_text = "90"
+
+[node name="RotateButton" type="Button" parent="HFlowContainer/HBoxContainer"]
+layout_mode = 2
+text = "Rotate"
+
+[node name="RotateAllButton" type="Button" parent="HFlowContainer/HBoxContainer"]
+layout_mode = 2
+text = "RotateAll"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HFlowContainer/HBoxContainer2"]
+layout_mode = 2
+text = "1.0"
+placeholder_text = "1.0"
+
+[node name="SpeedScaleButton" type="Button" parent="HFlowContainer/HBoxContainer2"]
+layout_mode = 2
+text = "SpeedScale"

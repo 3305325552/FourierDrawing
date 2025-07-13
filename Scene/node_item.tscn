@@ -1,55 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://digns34fo8q3s"]
+[gd_scene load_steps=4 format=3 uid="uid://digns34fo8q3s"]
 
 [ext_resource type="Script" uid="uid://bxcdmldop5xh3" path="res://Script/NodeItem.cs" id="1_mvlfq"]
+[ext_resource type="PackedScene" uid="uid://bv6p4kdxbkxdo" path="res://Scene/custom_line_edit.tscn" id="2_br344"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_br344"]
+bg_color = Color(0.223529, 0.243137, 0.27451, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="NodeItem" type="HBoxContainer"]
-offset_right = 654.0
+offset_right = 570.0
 offset_bottom = 40.0
+size_flags_horizontal = 0
 theme_override_constants/separation = 10
 script = ExtResource("1_mvlfq")
 
-[node name="Label" type="Label" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Node"
+theme_override_styles/panel = SubResource("StyleBoxFlat_br344")
+
+[node name="Label" type="Label" parent="PanelContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0, 0.678431, 0.709804, 1)
+text = "Name"
 horizontal_alignment = 1
 
-[node name="SpeedSetting" type="HBoxContainer" parent="."]
+[node name="SpeedEdit" parent="." instance=ExtResource("2_br344")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 5.53
+VariableName = "Speed"
+Unit = "r/s"
 
-[node name="LineEdit" type="LineEdit" parent="SpeedSetting"]
+[node name="LengthEdit" parent="." instance=ExtResource("2_br344")]
 layout_mode = 2
-size_flags_horizontal = 3
+VariableName = "Length"
+Unit = "pixel"
 
-[node name="Label" type="Label" parent="SpeedSetting"]
+[node name="Phi0Edit" parent="." instance=ExtResource("2_br344")]
 layout_mode = 2
-text = "rad/s"
-
-[node name="LineLengthSetting" type="HBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 5.95
-
-[node name="LineEdit" type="LineEdit" parent="LineLengthSetting"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="LineLengthSetting"]
-layout_mode = 2
-text = "pixel"
-
-[node name="Phi0Setting" type="HBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 5.95
-theme_override_constants/separation = 8
-
-[node name="Label" type="Label" parent="Phi0Setting"]
-layout_mode = 2
-text = "Phi0"
-
-[node name="LineEdit" type="LineEdit" parent="Phi0Setting"]
-layout_mode = 2
-size_flags_horizontal = 3
+VariableName = "Phi0"
+Unit = "rad"

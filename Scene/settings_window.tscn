@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://cynid07jg8ncb"]
+
+[ext_resource type="Script" uid="uid://pjoog4ubvfge" path="res://Script/SettingsWindow.cs" id="1_ovi6m"]
+
+[node name="SettingsWindow" type="Window"]
+title = "Settings"
+initial_position = 1
+size = Vector2i(480, 360)
+min_size = Vector2i(480, 360)
+script = ExtResource("1_ovi6m")
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RainbowCheckBox" type="CheckBox" parent="HFlowContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Rainbow"
+
+[node name="FadeCheckBox" type="CheckBox" parent="HFlowContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Fade"
+
+[node name="ShowBrushCheckBox" type="CheckBox" parent="HFlowContainer"]
+layout_mode = 2
+text = "ShowBrush"
+
+[node name="CustomLineColor" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HFlowContainer/CustomLineColor"]
+layout_mode = 2
+text = "CustomLineColor"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HFlowContainer/CustomLineColor"]
+layout_mode = 2
+text = "     "
+
+[node name="Maxpoint" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HFlowContainer/Maxpoint"]
+layout_mode = 2
+text = "MaxPoint "
+
+[node name="MaxpointSpinBox" type="SpinBox" parent="HFlowContainer/Maxpoint"]
+layout_mode = 2
+min_value = 100.0
+max_value = 60000.0
+value = 100.0
+rounded = true
+
+[node name="LineWidth" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HFlowContainer/LineWidth"]
+layout_mode = 2
+text = "LineWidth"
+
+[node name="LineWidthSpinBox" type="SpinBox" parent="HFlowContainer/LineWidth"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 10.0
+rounded = true
