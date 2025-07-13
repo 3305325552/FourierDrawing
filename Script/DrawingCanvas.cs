@@ -12,6 +12,7 @@ public partial class DrawingCanvas : Node2D
 
     public ToolsWindow ToolsWindow;
     public SettingsWindow SettingsWindow;
+    public LoadWindow LoadWindow;
 
     public float DefTick = 0f;
     public float TimePassed = 0f;
@@ -28,6 +29,7 @@ public partial class DrawingCanvas : Node2D
 
         ToolsWindow = GetNode<ToolsWindow>("UI/ToolsWindow");
         SettingsWindow = GetNode<SettingsWindow>("UI/SettingsWindow");
+        LoadWindow = GetNode<LoadWindow>("UI/LoadWindow");
 
         SettingsRect.MouseEntered += () => { Camera.allowZoom = false; };
         SettingsRect.MouseExited += () => { Camera.allowZoom = true; };
@@ -45,6 +47,10 @@ public partial class DrawingCanvas : Node2D
 
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/ToolsButton").ButtonDown += () => { ToolsWindow.Show(); };
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton").ButtonDown += () => { SettingsWindow.Show(); };
+        // TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").ButtonDown += () => { Canvas.Show(); };
+        // TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").ButtonDown += SaveDrawing;
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").ButtonDown += ()=> { LoadWindow.Show(); };
+
 
         Node2D NewBrush = new Node2D();
         NewBrush.Name = "Brush1";

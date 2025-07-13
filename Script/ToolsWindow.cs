@@ -10,17 +10,11 @@ public partial class ToolsWindow : Window
     {
         PauseButton = GetNode<Button>("HFlowContainer/PauseButton");
 
-        Hide();
-        CloseRequested += OnCloseRequest;
+        CloseRequested += Hide;
         PauseButton.ButtonDown += OnTogglePause;
         GetNode<Button>("HFlowContainer/HBoxContainer/RotateButton").ButtonDown += OnRotate;
         GetNode<Button>("HFlowContainer/HBoxContainer/RotateAllButton").ButtonDown += OnRotateAll;
         GetNode<Button>("HFlowContainer/HBoxContainer2/SpeedScaleButton").ButtonDown += OnSpeedScale;
-    }
-
-    public void OnCloseRequest()
-    {
-        Hide();
     }
 
     public void OnTogglePause()

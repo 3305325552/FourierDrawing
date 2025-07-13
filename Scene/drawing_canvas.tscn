@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://c8w7wrl1w3ppk"]
+[gd_scene load_steps=10 format=3 uid="uid://c8w7wrl1w3ppk"]
 
 [ext_resource type="Script" uid="uid://c74ka6y4r4y3y" path="res://Script/DrawingCanvas.cs" id="1_ifcv7"]
 [ext_resource type="Script" uid="uid://cbq4wqgoe3eum" path="res://Script/Camera2d.cs" id="2_m6o7e"]
 [ext_resource type="PackedScene" uid="uid://bsraemfgax16k" path="res://Scene/tools_window.tscn" id="2_v0lcu"]
 [ext_resource type="PackedScene" uid="uid://cynid07jg8ncb" path="res://Scene/settings_window.tscn" id="3_4b610"]
+[ext_resource type="PackedScene" uid="uid://b6p2xcc0oetfs" path="res://Scene/load_window.tscn" id="4_7vqkt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m6o7e"]
 size = Vector2(356, 560)
@@ -165,6 +166,8 @@ size_flags_horizontal = 3
 [node name="ToolsWindow" parent="UI" instance=ExtResource("2_v0lcu")]
 
 [node name="SettingsWindow" parent="UI" instance=ExtResource("3_4b610")]
+
+[node name="LoadWindow" parent="UI" instance=ExtResource("4_7vqkt")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_m6o7e")

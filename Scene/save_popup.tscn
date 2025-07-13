@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://34blf5k8ipk5"]
+
+[node name="SavePopup" type="PopupPanel"]
+title = "Save"
+initial_position = 1
+size = Vector2i(300, 150)
+visible = true
+min_size = Vector2i(300, 150)

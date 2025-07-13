@@ -38,8 +38,7 @@ public partial class SettingsWindow : Window
             CustomColorContainer.GetNode<ColorPickerButton>("ColorPickerButton").Color = Color.FromString(Global.Settings["CustomLineColor"] as string, Colors.Black);
         }
 
-        Hide();
-        CloseRequested += OnCloseRequest;
+        CloseRequested += Hide;
         RainbowCheckBox.Toggled += (bool value) =>
         {
             Global.Settings["Rainbow"] = value;
@@ -58,11 +57,6 @@ public partial class SettingsWindow : Window
         MaxPointsSpinBox.ValueChanged += (double value) => { Global.Settings["MaxPoints"] = (int)value; };
         LineWidthSpinBox.ValueChanged += (double value) => { Global.Settings["LineWidth"] = (int)value; };
         CustomColorContainer.GetNode<ColorPickerButton>("ColorPickerButton").ColorChanged += (Color color) => { Global.Settings["CustomLineColor"] = color.ToHtml(); };
-    }
-
-    public void OnCloseRequest()
-    {
-        Hide();
     }
 
     public void OnToggleShowBrush(bool value)
