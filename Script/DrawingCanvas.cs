@@ -8,11 +8,12 @@ public partial class DrawingCanvas : Node2D
     public VBoxContainer NodeList;
     public HBoxContainer TabBar;
     public Node2D Canvas;
-    public Camera2d Camera;
+    public Camera Camera;
 
     public ToolsWindow ToolsWindow;
     public SettingsWindow SettingsWindow;
     public LoadWindow LoadWindow;
+    public SavePopup SavePopup;
 
     public float DefTick = 0f;
     public float TimePassed = 0f;
@@ -25,11 +26,12 @@ public partial class DrawingCanvas : Node2D
         NodeList = GetNode<VBoxContainer>("UI/VSplitContainer/NodeList/VBoxContainer");
         TabBar = GetNode<HBoxContainer>("UI/VSplitContainer/TabBar");
         Canvas = GetNode<Node2D>("Canvas");
-        Camera = GetNode<Camera2d>("Camera2D");
+        Camera = GetNode<Camera>("Camera");
 
         ToolsWindow = GetNode<ToolsWindow>("UI/ToolsWindow");
         SettingsWindow = GetNode<SettingsWindow>("UI/SettingsWindow");
         LoadWindow = GetNode<LoadWindow>("UI/LoadWindow");
+        SavePopup = GetNode<SavePopup>("UI/SavePopup");
 
         SettingsRect.MouseEntered += () => { Camera.allowZoom = false; };
         SettingsRect.MouseExited += () => { Camera.allowZoom = true; };
@@ -48,7 +50,7 @@ public partial class DrawingCanvas : Node2D
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/ToolsButton").ButtonDown += () => { ToolsWindow.Show(); };
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton").ButtonDown += () => { SettingsWindow.Show(); };
         // TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").ButtonDown += () => { Canvas.Show(); };
-        // TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").ButtonDown += SaveDrawing;
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").ButtonDown += ()=> { SavePopup.Show(); };
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").ButtonDown += ()=> { LoadWindow.Show(); };
 
 
@@ -78,7 +80,7 @@ public partial class DrawingCanvas : Node2D
             for (int j = 0; j < DrawingPositions[i].Count - 1; j++)
             {
                 // Fade Bug
-                float Alpha = (bool)Settings["Fade"] ? j / (float)(DrawingPositions.Count - 1) : 1f;
+                float Alpha = (bool)Settings["Fade"] ? j / (float)(DrawingPositions[i].Count - 1) : 1f;
                 DrawLine(DrawingPositions[i][j], DrawingPositions[i][j + 1], (bool)Settings["Rainbow"] ? Color.FromOkHsl(Col, 1, 0.5f, Alpha) : Color.FromString(Settings["CustomLineColor"] as string, Colors.Black), (int)Settings["LineWidth"]);
                 Col += 0.002f;
                 Col %= 1f;
@@ -162,8 +164,6 @@ public partial class DrawingCanvas : Node2D
         DrawNode NewDrawNode = DrawNodeScene.Instantiate() as DrawNode;
         BrushList[CurrentBrushIndex].AddChild(NewDrawNode);
 
-        GD.Print("CurrentBrushIndex: " + BrushList.Count);
-
         if ((bool)Settings["ShowBrush"]) NewDrawNode.LineItem.Show();
         else NewDrawNode.LineItem.Hide();
         if (DrawNodeList[CurrentBrushIndex].Count > 0) NewDrawNode.PrevPoint = DrawNodeList[CurrentBrushIndex][DrawNodeList[CurrentBrushIndex].Count - 1];
@@ -173,6 +173,7 @@ public partial class DrawingCanvas : Node2D
         NodeItem NewNodeItem = NodeItemScene.Instantiate() as NodeItem;
         NodeList.AddChild(NewNodeItem);
         string Name = "Node" + DrawNodeList.Count.ToString();
+        NewDrawNode.Name = Name;
         NewNodeItem.Name = Name;
         NewNodeItem.NameLabel.Text = Name;
         NewNodeItem.SpeedEdit.LineEdit.Text = NewDrawNode.Speed.ToString();
@@ -186,9 +187,9 @@ public partial class DrawingCanvas : Node2D
 
     public void DelDrawNode()
     {
-        if (DrawNodeList.Count > 0)
+        if (DrawNodeList[CurrentBrushIndex].Count > 0)
         {
-            DrawNode LastDrawNode = DrawNodeList[CurrentBrushIndex][DrawNodeList.Count - 1];
+            DrawNode LastDrawNode = DrawNodeList[CurrentBrushIndex][DrawNodeList[CurrentBrushIndex].Count - 1];
             BrushList[CurrentBrushIndex].RemoveChild(LastDrawNode);
             DrawNodeList[CurrentBrushIndex].Remove(LastDrawNode);
             LastDrawNode.QueueFree();
@@ -303,6 +304,4 @@ public partial class DrawingCanvas : Node2D
 /*
     TODO:
     - Canvas
-    - Save and Load
-    - Rotate Any Angle
 */

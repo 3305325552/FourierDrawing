@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://c8w7wrl1w3ppk"]
+[gd_scene load_steps=11 format=3 uid="uid://c8w7wrl1w3ppk"]
 
 [ext_resource type="Script" uid="uid://c74ka6y4r4y3y" path="res://Script/DrawingCanvas.cs" id="1_ifcv7"]
-[ext_resource type="Script" uid="uid://cbq4wqgoe3eum" path="res://Script/Camera2d.cs" id="2_m6o7e"]
 [ext_resource type="PackedScene" uid="uid://bsraemfgax16k" path="res://Scene/tools_window.tscn" id="2_v0lcu"]
 [ext_resource type="PackedScene" uid="uid://cynid07jg8ncb" path="res://Scene/settings_window.tscn" id="3_4b610"]
 [ext_resource type="PackedScene" uid="uid://b6p2xcc0oetfs" path="res://Scene/load_window.tscn" id="4_7vqkt"]
+[ext_resource type="PackedScene" uid="uid://34blf5k8ipk5" path="res://Scene/save_popup.tscn" id="5_xrbet"]
+[ext_resource type="PackedScene" uid="uid://ha6epd8qkeke" path="res://Scene/camera.tscn" id="6_xrbet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m6o7e"]
 size = Vector2(356, 560)
@@ -164,10 +165,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ToolsWindow" parent="UI" instance=ExtResource("2_v0lcu")]
+visible = false
 
 [node name="SettingsWindow" parent="UI" instance=ExtResource("3_4b610")]
+visible = false
 
 [node name="LoadWindow" parent="UI" instance=ExtResource("4_7vqkt")]
+visible = false
 
-[node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource("2_m6o7e")
+[node name="SavePopup" parent="UI" instance=ExtResource("5_xrbet")]
+visible = false
+
+[node name="Camera" parent="." instance=ExtResource("6_xrbet")]

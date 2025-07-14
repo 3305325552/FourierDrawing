@@ -1,19 +1,21 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class LoadWindow : Window
 {
     public ScrollContainer FileList;
+    public VBoxContainer FileListBox;
     public HBoxContainer ActionBar;
 
     public override void _Ready()
     {
         FileList = GetNode<ScrollContainer>("FileList");
+        FileListBox = GetNode<VBoxContainer>("FileList/VBoxContainer");
         ActionBar = GetNode<HBoxContainer>("ActionBar");
 
         OnSizeChanged();
-        LoadAllFiles();
-        RefreshFileList();
+        GetAllSavedFiles();
 
         CloseRequested += Hide;
         SizeChanged += OnSizeChanged;
@@ -21,9 +23,38 @@ public partial class LoadWindow : Window
         ActionBar.GetNode<Button>("LoadButton").ButtonDown += OnLoad;
     }
 
-    public void LoadAllFiles()
+    public void GetAllSavedFiles()
     {
-        // TODO: Load files
+        foreach (Label label in FileListBox.GetChildren()) label.QueueFree();
+
+        var savePath = "res://Saves/";
+        var dir = DirAccess.Open(savePath);
+        if (dir == null)
+        {
+            GD.Print("Error: Could not open directory: " + savePath);
+            return;
+        }
+
+        dir.ListDirBegin();
+        var file = dir.GetNext();
+        while (file != "")
+        {
+            if (file.GetExtension() == "drawing" && !dir.CurrentIsDir())
+            {
+                Button button = new Button();
+                button.Text = file.GetBaseName();
+                button.ButtonDown += () =>
+                {
+                    ActionBar.GetNode<LineEdit>("LineEdit").Text = button.Text;
+                };
+                button.FocusMode = Control.FocusModeEnum.None;
+                button.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+                button.Alignment = HorizontalAlignment.Left;
+                FileListBox.AddChild(button);
+            }
+            file = dir.GetNext();
+        }
+        dir.ListDirEnd();
     }
 
     public void OnSizeChanged()
@@ -37,19 +68,13 @@ public partial class LoadWindow : Window
 
     public void OnRefresh()
     {
-        LoadAllFiles();
-        RefreshFileList();
+        GetAllSavedFiles();
     }
 
     public void OnLoad()
     {
-        // TODO: Load file
+        Global.LoadDrawingFromFile(ActionBar.GetNode<LineEdit>("LineEdit").Text + ".drawing");
     }
 
     // TODO: FileDrop
-
-    private void RefreshFileList()
-    {
-        // TODO: Refresh file list
-    }
 }

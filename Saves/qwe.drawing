@@ -1,0 +1,23 @@
+{
+  "BrushDataList": [
+    {
+      "Name": "Brush1"
+    }
+  ],
+  "DrawNodeDataList": [
+    [
+      {
+        "Name": "DrawNode",
+        "Speed": 1,
+        "LineLength": 100,
+        "Phi0": 0
+      },
+      {
+        "Name": "@Node2D@44",
+        "Speed": 2,
+        "LineLength": 100,
+        "Phi0": 0
+      }
+    ]
+  ]
+}
