@@ -3,3 +3,7 @@
 /android/
 data_Drawing_windows_x86_64/
 settings.ini
+/Saves
+*.exe
+*.pck
+*.zip
