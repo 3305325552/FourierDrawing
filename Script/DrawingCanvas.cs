@@ -15,13 +15,13 @@ public partial class DrawingCanvas : Node2D
     public LoadWindow LoadWindow;
     public SavePopup SavePopup;
 
+    private Tween _uiTween;
+
     public float DefTick = 0f;
     public float TimePassed = 0f;
 
     public override void _Ready()
     {
-        GD.Print("DrawingCanvas _Ready");
-
         SettingsRect = GetNode<Area2D>("UI/Area2D");
         NodeList = GetNode<VBoxContainer>("UI/VSplitContainer/NodeList/VBoxContainer");
         TabBar = GetNode<HBoxContainer>("UI/VSplitContainer/TabBar");
@@ -39,6 +39,7 @@ public partial class DrawingCanvas : Node2D
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddNodeButton").ButtonDown += AddDrawNode;
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelNodeButton").ButtonDown += DelDrawNode;
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/ClearButton").ButtonDown += ClearDrawing;
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CleanButton").ButtonDown += OnClean;
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddBrushButton").ButtonDown += AddBrush;
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelBrushButton").ButtonDown += DelBrush;
         TabBar.GetNode<Button>("PrevButton").ButtonDown += PrevBrush;
@@ -46,22 +47,28 @@ public partial class DrawingCanvas : Node2D
         TreeExiting += OnShutDown;
 
         ToolsWindow.GetNode<Button>("HFlowContainer/ClearButton").ButtonDown += ClearDrawing;
+        ToolsWindow.GetNode<Button>("HFlowContainer/CleanButton").ButtonDown += OnClean;
 
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/ToolsButton").ButtonDown += () => { ToolsWindow.Show(); };
         TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton").ButtonDown += () => { SettingsWindow.Show(); };
-        // TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").ButtonDown += () => { Canvas.Show(); };
-        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").ButtonDown += ()=> { SavePopup.Show(); };
-        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").ButtonDown += ()=> { LoadWindow.Show(); };
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").ButtonDown += () =>
+        {
+            GetTree().ChangeSceneToFile("res://Scene/canvas.tscn");
+            CleanAll();
+        };
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").ButtonDown += () => { SavePopup.Show(); };
+        TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").ButtonDown += () => { LoadWindow.Show(); };
 
 
-        Node2D NewBrush = new Node2D();
-        NewBrush.Name = "Brush1";
+        Node2D NewBrush = new Node2D() { Name = "Brush1" };
         Canvas.AddChild(NewBrush);
         BrushList.Add(NewBrush);
         DrawingPositions.Add(new List<Vector2>());
         DrawNodeList.Add(new List<DrawNode>());
 
         Global.DrawingCanvas = this;
+
+        _uiTween = CreateTween();
     }
 
     public override void _Process(double delta)
@@ -91,7 +98,7 @@ public partial class DrawingCanvas : Node2D
     public override void _PhysicsProcess(double delta)
     {
         TimePassed += (float)delta;
-        for(int i = 0; i < DrawNodeList.Count; i++)
+        for (int i = 0; i < DrawNodeList.Count; i++)
         {
             foreach (DrawNode drawNode in DrawNodeList[i])
                 drawNode.Update(TimePassed);
@@ -106,54 +113,49 @@ public partial class DrawingCanvas : Node2D
 
     public void OnToggleSettingsWindow(bool ToggleOn)
     {
+        var buttons = new List<Control>
+        {
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddNodeButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelNodeButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddBrushButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelBrushButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton"),
+            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton"),
+            TabBar.GetNode<Button>("PrevButton"),
+            TabBar.GetNode<Label>("CurrentBrush"),
+            TabBar.GetNode<Button>("NextButton"),
+        };
+
         if (ToggleOn)
         {
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddNodeButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelNodeButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddBrushButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelBrushButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").Visible = true;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").Visible = true;
-            TabBar.GetNode<Button>("PrevButton").Visible = true;
-            TabBar.GetNode<Label>("CurrentBrush").Visible = true;
-            TabBar.GetNode<Button>("NextButton").Visible = true;
+            AnimateButtons(buttons, true, 0.3f);
             NodeList.Visible = true;
 
             CollisionShape2D SettingsRectShape = SettingsRect.GetNode<CollisionShape2D>("CollisionShape2D");
             Vector2 SettingsRectSize = new Vector2(SettingsRect.GetNode<ColorRect>("SettingsRect").Size.X, 560);
-            SettingsRect.GetNode<ColorRect>("SettingsRect").Size = SettingsRectSize;
             if (SettingsRectShape.Shape is RectangleShape2D)
             {
                 RectangleShape2D SettingsRectRectShape = SettingsRectShape.Shape as RectangleShape2D;
                 SettingsRectRectShape.Size = SettingsRectSize;
             }
+            AnimateColorRect(SettingsRect.GetNode<ColorRect>("SettingsRect"), SettingsRectSize.Y, 0.2f);
             TabBar.GetNode<Button>("MinimizeButton").Text = "  -  ";
         }
         else
         {
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddNodeButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelNodeButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/AddBrushButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/DelBrushButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SettingsButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/CanvasButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/SaveButton").Visible = false;
-            TabBar.GetNode<Button>("HScrollBar/HBoxContainer/LoadButton").Visible = false;
-            TabBar.GetNode<Button>("PrevButton").Visible = false;
-            TabBar.GetNode<Label>("CurrentBrush").Visible = false;
-            TabBar.GetNode<Button>("NextButton").Visible = false;
+            AnimateButtons(buttons, false, 0.3f);
             NodeList.Visible = false;
 
             CollisionShape2D SettingsRectShape = SettingsRect.GetNode<CollisionShape2D>("CollisionShape2D");
             Vector2 SettingsRectSize = new Vector2(SettingsRect.GetNode<ColorRect>("SettingsRect").Size.X, 50);
-            SettingsRect.GetNode<ColorRect>("SettingsRect").Size = SettingsRectSize;
             if (SettingsRectShape.Shape is RectangleShape2D)
             {
                 RectangleShape2D SettingsRectRectShape = SettingsRectShape.Shape as RectangleShape2D;
                 SettingsRectRectShape.Size = SettingsRectSize;
             }
+            AnimateColorRect(SettingsRect.GetNode<ColorRect>("SettingsRect"), SettingsRectSize.Y, 0.2f);
             TabBar.GetNode<Button>("MinimizeButton").Text = "  +  ";
         }
     }
@@ -295,13 +297,68 @@ public partial class DrawingCanvas : Node2D
         }
     }
 
+    public void OnClean()
+    {
+        CleanAll();
+        foreach (NodeItem nodeItem in NodeList.GetChildren()) nodeItem.QueueFree();
+
+        Node2D NewBrush = new Node2D() { Name = "Brush1" };
+        Canvas.AddChild(NewBrush);
+        BrushList.Add(NewBrush);
+        DrawingPositions.Add(new List<Vector2>());
+        DrawNodeList.Add(new List<DrawNode>());
+    }
+
     public void OnShutDown()
     {
         SaveSettings();
+    }
+
+    private void AnimateColorRect(ColorRect colorRect, float targetHeight, float duration)
+    {
+        _uiTween?.Kill();
+        _uiTween = CreateTween()
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Quint);
+
+        Vector2 targetSize = new Vector2(colorRect.Size.X, targetHeight);
+        _uiTween.TweenProperty(colorRect, "size", targetSize, duration)
+            .FromCurrent();
+    }
+
+    private void AnimateButtons(List<Control> buttons, bool fadeIn, float duration)
+    {
+        foreach (Control btn in buttons)
+        {
+            if (fadeIn)
+            {
+                btn.Visible = true;
+                btn.Modulate = new Color(1, 1, 1, 0);
+
+                CreateTween()
+                    .TweenProperty(btn, "modulate:a", 1f, duration)
+                    .SetEase(Tween.EaseType.Out)
+                    .SetTrans(Tween.TransitionType.Cubic);
+            }
+            else
+            {
+                CreateTween()
+                    .TweenProperty(btn, "modulate:a", 0f, duration)
+                    .SetEase(Tween.EaseType.Out)
+                    .SetTrans(Tween.TransitionType.Cubic)
+                    .Finished += () => btn.Visible = false;
+            }
+        }
     }
 }
 
 /*
     TODO:
     - Canvas
+    - File Drop
+    - Animations
+
+    Improvements:
+    - SceneChange
+    - UI
 */

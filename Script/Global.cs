@@ -30,6 +30,7 @@ public class Global
     public static List<List<DrawNode>> DrawNodeList = new List<List<DrawNode>>();
     public static List<List<Vector2>> DrawingPositions = new List<List<Vector2>>();
     public static DrawingCanvas DrawingCanvas;
+    public static List<List<Vector2>> SamplePoints = new List<List<Vector2>>();
     public static int CurrentBrushIndex = 0;
 
     public static Dictionary<string, object> Settings = new Dictionary<string, object>()
@@ -241,5 +242,22 @@ public class Global
             GD.Print($"成功从 {path} 加载绘图数据");
             GD.Print($"DrawNode{DrawNodeList.Count} NodeList{DrawingCanvas.NodeList.GetChildCount()}");
         }
+    }
+
+    public static void CleanAll()
+    {
+        foreach (Node2D brush in BrushList) brush.QueueFree();
+        BrushList.Clear();
+
+        foreach (List<DrawNode> drawNodes in DrawNodeList)
+        {
+            foreach (DrawNode drawNode in drawNodes)
+            {
+                drawNode.QueueFree();
+            }
+        }
+        DrawNodeList.Clear();
+
+        DrawingPositions.Clear();
     }
 }

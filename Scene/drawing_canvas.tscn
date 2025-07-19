@@ -92,6 +92,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Clear"
 
+[node name="CleanButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Clean"
+
 [node name="AddBrushButton" type="Button" parent="UI/VSplitContainer/TabBar/HScrollBar/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0

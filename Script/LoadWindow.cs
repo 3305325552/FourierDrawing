@@ -25,7 +25,7 @@ public partial class LoadWindow : Window
 
     public void GetAllSavedFiles()
     {
-        foreach (Label label in FileListBox.GetChildren()) label.QueueFree();
+        foreach (Button button in FileListBox.GetChildren()) button.QueueFree();
 
         var savePath = "res://Saves/";
         var dir = DirAccess.Open(savePath);
